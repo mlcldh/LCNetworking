@@ -1,0 +1,11 @@
+platform :ios, '8.0'
+use_frameworks!
+
+source 'https://github.com/CocoaPods/Specs.git'
+
+target 'LCNetworkingDemo' do
+
+pod 'LCNetworking', :path => '../'
+pod 'Masonry', '1.1.0'
+
+end
