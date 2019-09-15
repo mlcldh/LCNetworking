@@ -21,8 +21,8 @@
     // Do any additional setup after loading the view.
 //    [self doGet];
 //    [self doGet2];
-    [self doGetImage];
-//    [self doGetByAF];
+//    [self doGetImage];
+    [self doGetByAF];
 //    [self doPost];
 }
 - (void)doGet{
@@ -97,9 +97,10 @@
     request.URL = [NSURL URLWithString:serverUrlString];
     request.HTTPMethod = @"GET";
     [request setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
-    AFSecurityPolicy *securityPolicy = [[AFSecurityPolicy alloc]init];
-    securityPolicy.allowInvalidCertificates = YES;
-    securityPolicy.validatesDomainName = NO;
+    AFSecurityPolicy *securityPolicy = [AFSecurityPolicy policyWithPinningMode:(AFSSLPinningModeCertificate)];
+//    AFSecurityPolicy *securityPolicy = [[AFSecurityPolicy alloc]init];
+//    securityPolicy.allowInvalidCertificates = YES;
+//    securityPolicy.validatesDomainName = NO;
     AFURLSessionManager *sessionManager = [[AFURLSessionManager alloc]init];
     sessionManager.securityPolicy = securityPolicy;
     NSURLSessionDataTask *dataTask = [sessionManager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
