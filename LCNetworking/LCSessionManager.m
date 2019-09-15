@@ -33,7 +33,17 @@
     NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         id responseObject = nil;
         if (!error && data) {
-            responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            if ([response.MIMEType isEqualToString:@"application/json"]) {
+                responseObject = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+            } else if ([response.MIMEType isEqualToString:@"image/png"]) {
+                
+            } else if ([response.MIMEType isEqualToString:@"image/jpeg"]) {
+                UIImage *image = [UIImage imageWithData:data];
+                responseObject = image;
+            } else {
+                responseObject = data;
+            }
+            
         }
         if (completionHandler) {
             completionHandler(response,responseObject,error);
@@ -76,9 +86,36 @@
 //#pragma mark - NSURLSessionDelegate
 //- (void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(nullable NSError *)error {
 //}
-//- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
-// completionHandler:(nonnull void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
-//}
+- (void)URLSession:(NSURLSession *)session didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
+ completionHandler:(nonnull void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential * _Nullable))completionHandler {
+    NSURLSessionAuthChallengeDisposition disposition = NSURLSessionAuthChallengePerformDefaultHandling;
+    __block NSURLCredential *credential = nil;
+    
+    if ([challenge.protectionSpace.authenticationMethod isEqualToString:NSURLAuthenticationMethodServerTrust]) {
+        credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+        if (credential) {
+            disposition = NSURLSessionAuthChallengeUseCredential;
+        } else {
+            disposition = NSURLSessionAuthChallengePerformDefaultHandling;
+        }
+//        if ([self.securityPolicy evaluateServerTrust:challenge.protectionSpace.serverTrust forDomain:challenge.protectionSpace.host]) {
+//            credential = [NSURLCredential credentialForTrust:challenge.protectionSpace.serverTrust];
+//            if (credential) {
+//                disposition = NSURLSessionAuthChallengeUseCredential;
+//            } else {
+//                disposition = NSURLSessionAuthChallengePerformDefaultHandling;
+//            }
+//        } else {
+//            disposition = NSURLSessionAuthChallengeCancelAuthenticationChallenge;
+//        }
+    } else {
+        disposition = NSURLSessionAuthChallengePerformDefaultHandling;
+    }
+    
+    if (completionHandler) {
+        completionHandler(disposition, credential);
+    }
+}
 //- (void)URLSessionDidFinishEventsForBackgroundURLSession:(NSURLSession *)session {
 //}
 //#pragma mark - NSURLSessionTaskDelegate
