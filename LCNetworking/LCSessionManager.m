@@ -10,18 +10,43 @@
 
 @interface LCSessionManager ()<NSURLSessionDelegate>
 
+@property (readwrite, nonatomic, strong) NSURLSessionConfiguration *sessionConfiguration;
+@property (readwrite, nonatomic, strong) NSOperationQueue *operationQueue;
 @property (nonatomic,strong) NSURLSession *session;
 
 @end
 
 @implementation LCSessionManager
 
-#pragma mark - Getter
-- (NSURLSession *)session {
-    if (!_session) {
-        _session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:self delegateQueue:[NSOperationQueue mainQueue]];
++ (instancetype)sharedInstance {
+    static dispatch_once_t onceToken = 0;
+    static LCSessionManager *instance = nil;
+    dispatch_once(&onceToken, ^{
+        instance = [[self alloc]init];
+    });
+    return instance;
+}
+- (instancetype)init {
+    return [self initWithSessionConfiguration:nil];
+}
+- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration {
+    self = [super init];
+    if (!self) {
+        return nil;
     }
-    return _session;
+    
+    if (!configuration) {
+        configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
+    }
+    
+    self.sessionConfiguration = configuration;
+    
+    self.operationQueue = [[NSOperationQueue alloc] init];
+    self.operationQueue.maxConcurrentOperationCount = 1;
+    
+    self.session = [NSURLSession sessionWithConfiguration:self.sessionConfiguration delegate:self delegateQueue:self.operationQueue];
+    
+    return self;
 }
 #pragma mark -
 - (NSURLSessionDataTask *)dataTaskWithRequestBlock:(void (^)(NSMutableURLRequest *))requestBlock completionHandler:(void (^)(NSURLResponse *, id, NSError *))completionHandler {

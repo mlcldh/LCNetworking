@@ -8,13 +8,15 @@
 
 #import <Foundation/Foundation.h>
 
-NS_ASSUME_NONNULL_BEGIN
-
 /***/
 @interface LCSessionManager : NSObject
 
 /***/
 @property (readonly, nonatomic, strong) NSURLSession *session;
+/***/
++ (instancetype)sharedInstance;
+/***/
+- (instancetype)initWithSessionConfiguration:(NSURLSessionConfiguration *)configuration;
 
 /***/
 - (NSURLSessionDataTask *)dataTaskWithRequestBlock:(void (^)(NSMutableURLRequest *request))requestBlock
@@ -26,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**上传
  @param bodyData 上传的data
  */
-- (NSURLSessionUploadTask *)uploadTaskWithRequestBlock:(void (^)(NSMutableURLRequest *request))requestBlock fromData:(nullable NSData *)bodyData completionHandler:(void (^)(NSData * data, NSURLResponse * response, NSError * error))completionHandler;
+- (NSURLSessionUploadTask *)uploadTaskWithRequestBlock:(void (^)(NSMutableURLRequest *request))requestBlock fromData:(NSData *)bodyData completionHandler:(void (^)(NSData * data, NSURLResponse * response, NSError * error))completionHandler;
 
 /**下载*/
 - (NSURLSessionDownloadTask *)downloadTaskWithRequestBlock:(void (^)(NSMutableURLRequest *request))requestBlock completionHandler:(void (^)(NSURL * location, NSURLResponse * response, NSError * error))completionHandler;
@@ -37,4 +39,3 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-NS_ASSUME_NONNULL_END

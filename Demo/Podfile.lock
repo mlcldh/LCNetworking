@@ -16,26 +16,16 @@ PODS:
     - AFNetworking/NSURLSession
   - LCNetworking (0.1.0)
   - Masonry (1.1.0)
-  - SDWebImage (5.1.1):
-    - SDWebImage/Core (= 5.1.1)
-  - SDWebImage/Core (5.1.1)
-  - YYImage (1.0.4):
-    - YYImage/Core (= 1.0.4)
-  - YYImage/Core (1.0.4)
 
 DEPENDENCIES:
   - AFNetworking (= 3.2.1)
   - LCNetworking (from `../`)
   - Masonry (= 1.1.0)
-  - SDWebImage
-  - YYImage
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - AFNetworking
     - Masonry
-    - SDWebImage
-    - YYImage
 
 EXTERNAL SOURCES:
   LCNetworking:
@@ -45,9 +35,7 @@ SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   LCNetworking: 989b3728c4c600dfee186aeb6ca6cc10617303b3
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  SDWebImage: 96d7f03415ccb28d299d765f93557ff8a617abd8
-  YYImage: 1e1b62a9997399593e4b9c4ecfbbabbf1d3f3b54
 
-PODFILE CHECKSUM: 6ab28cd49070278c33709c854ea51f81fbd56c51
+PODFILE CHECKSUM: e411031ecfd34dea6a8b760fab828e77f74579fb
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.4
